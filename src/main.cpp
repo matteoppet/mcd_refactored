@@ -11,7 +11,7 @@
 #include "second_thread/second_thread.h"
 #include "render/dashboard/dashboard.h"
 
-
+SatelliteObject* SATELLITE_SELECTED = nullptr;
 
 int main() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -43,6 +43,10 @@ int main() {
             else telemetry.start(); 
         }
 
+        if (SATELLITE_SELECTED) {
+            std::cout << SATELLITE_SELECTED->name << std::endl;
+        }
+
         BeginDrawing();
             ClearBackground(BLACK);
 
@@ -54,20 +58,27 @@ int main() {
 
             rlImGuiBegin();
                 ImGui::Begin("Mission Control");
-
-                    // PANEL ONE
                     dashboard.draw_view_mode();
                     ImGui::Separator();
                     dashboard.draw_search_bar();
-                    dashboard.draw_list_satellites(get_all_satellites());
+                    SATELLITE_SELECTED = dashboard.draw_list_satellites(get_all_satellites());
                     dashboard.draw_add_delete_buttons_satellites();
-
                 ImGui::End();
+
+                if (SATELLITE_SELECTED) {
+                    ImGui::SetNextWindowPos(ImVec2(ImGui::GetWindowWidth()-200, 100), ImGuiCond_FirstUseEver);
+                    ImGui::Begin("Satellite Info", NULL, ImGuiWindowFlags_AlwaysAutoResize);
+                        dashboard.draw_satellite_name(SATELLITE_SELECTED);
+                        ImGui::Separator();
+                        dashboard.draw_satellite_info(SATELLITE_SELECTED);
+                        ImGui::Separator();
+                        dashboard.draw_track_satellite_button();
+                    ImGui::End();   
+                }
+
             rlImGuiEnd();
 
         EndDrawing();
-
-
     }
 
     simulator.de_initialization();

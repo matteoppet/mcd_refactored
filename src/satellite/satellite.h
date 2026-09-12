@@ -54,6 +54,15 @@ struct SatelliteObject {
             (float)position_eci.z * SCALE
         };
     }
+
+    double get_velocity_kms() const {
+        return std::sqrt(std::pow(velocity_eci.x, 2) + 
+                         std::pow(velocity_eci.y, 2) + 
+                         std::pow(velocity_eci.z, 2));
+    }
+    double get_velocity_kmh() const {
+        return get_velocity_kms() * 3600.0;
+    }
 };
 
 void create_sgp4_object(SatelliteObject& satellite);

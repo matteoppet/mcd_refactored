@@ -14,7 +14,7 @@ struct Earth {
 
     Vector3 position;
 
-    static constexpr float EARTH_RADIUS = 2.0f;
+    static constexpr float EARTH_RADIUS = 1.5f;
     static constexpr float EARTH_RADIUS_KM_REAL = 6371.0f;
 
     void init() {
@@ -31,10 +31,16 @@ class Simulator {
         Earth earth;
         const float SCALE = Earth::EARTH_RADIUS / Earth::EARTH_RADIUS_KM_REAL;
 
+        Model satellite_model;
+
     public:
         Simulator() {
-            earth.init();
         };
+
+        void init() {
+            earth.init();
+            satellite_model = LoadModel("../assets/simple_satellite.glb");
+        }
 
         void draw_earth();
         void draw_satellites(std::vector<SatelliteObject>& satellitesList);

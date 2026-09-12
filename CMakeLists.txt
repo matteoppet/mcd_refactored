@@ -64,6 +64,7 @@ add_executable(${PROJECT_NAME}
     src/render/camera.cpp
     src/render/simulator/simulator.cpp
     src/second_thread/second_thread.cpp
+    src/render/dashboard/dashboard.cpp
     ${imgui_SOURCE_DIR}/imgui.cpp
     ${imgui_SOURCE_DIR}/imgui_draw.cpp
     ${imgui_SOURCE_DIR}/imgui_tables.cpp

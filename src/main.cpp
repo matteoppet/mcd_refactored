@@ -9,6 +9,7 @@
 #include "render/simulator/simulator.h"
 #include "render/camera.h"
 #include "second_thread/second_thread.h"
+#include "render/dashboard/dashboard.h"
 
 
 
@@ -27,8 +28,11 @@ int main() {
     CustomCamera camera;
     Simulator simulator;
     WorkerManager telemetry;
+    Dashboard dashboard;
 
     telemetry.start();
+
+    simulator.init();
 
     while (!WindowShouldClose()) {
         if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
@@ -49,9 +53,21 @@ int main() {
             EndMode3D();
 
             rlImGuiBegin();
+                ImGui::Begin("Mission Control");
+
+                    // PANEL ONE
+                    dashboard.draw_view_mode();
+                    ImGui::Separator();
+                    dashboard.draw_search_bar();
+                    dashboard.draw_list_satellites(get_all_satellites());
+                    dashboard.draw_add_delete_buttons_satellites();
+
+                ImGui::End();
             rlImGuiEnd();
 
         EndDrawing();
+
+
     }
 
     simulator.de_initialization();
@@ -60,3 +76,7 @@ int main() {
     CloseWindow();
     return 0;
 }
+
+// TODO: Create ImGui setup
+
+// TODO: after ImGui, update graphic of Raylib

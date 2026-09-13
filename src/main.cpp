@@ -12,6 +12,7 @@
 #include "render/dashboard/dashboard.h"
 
 SatelliteObject* SATELLITE_SELECTED = nullptr;
+int view_mode = 0; // 0: 3D | 1: 2D
 
 int main() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -56,13 +57,32 @@ int main() {
                 DrawGrid(10, 1.0f);
             EndMode3D();
 
+
             rlImGuiBegin();
                 ImGui::Begin("Mission Control");
-                    dashboard.draw_view_mode();
-                    ImGui::Separator();
-                    dashboard.draw_search_bar();
-                    SATELLITE_SELECTED = dashboard.draw_list_satellites(get_all_satellites());
-                    dashboard.draw_add_delete_buttons_satellites();
+                    if (ImGui::BeginTabBar("Mission Control"))
+                    {  
+                        if (ImGui::BeginTabItem("Mission Control"))
+                        {
+                            dashboard.draw_view_mode();
+                            ImGui::Separator();
+                            dashboard.draw_search_bar();
+                            SATELLITE_SELECTED = dashboard.draw_list_satellites(get_all_satellites());
+                            dashboard.draw_add_delete_buttons_satellites();
+                            ImGui::EndTabItem();
+                        }
+
+                        if (ImGui::BeginTabItem("Camera Settings"))
+                        {
+                            dashboard.draw_camera_settings(&camera);
+                            ImGui::Separator();
+                            dashboard.draw_reset_button(&camera);
+                            ImGui::EndTabItem();
+                        }
+                        ImGui::EndTabBar();
+                    } 
+
+
                 ImGui::End();
 
                 if (SATELLITE_SELECTED) {
@@ -87,7 +107,3 @@ int main() {
     CloseWindow();
     return 0;
 }
-
-// TODO: Create ImGui setup
-
-// TODO: after ImGui, update graphic of Raylib

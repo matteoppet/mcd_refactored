@@ -37,3 +37,20 @@ void create_txt_file_from_api(const std::string& url, const std::string txt_path
     }
     txtFile.close();
 }
+
+
+void append_new_satellite_to_file(std::string& name, std::string& tle1, std::string& tle2) {
+    std::ofstream outfile("../assets/data.txt", std::ios_base::app); 
+    
+    if (!name.empty() && name.back() == '\r') name.pop_back();
+    if (!tle1.empty() && tle1.back() == '\r') tle1.pop_back();
+    if (!tle2.empty() && tle2.back() == '\r') tle2.pop_back();
+
+    if (outfile.is_open()) {
+        std::cout << name << std::endl;
+        outfile << "\n" << name << "\n" << tle1 << "\n" << tle2;
+        outfile.close();
+    } else {
+        std::cerr << "Error: Could not open assets/data.txt for appending." << std::endl;
+    }
+}
